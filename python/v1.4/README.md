@@ -10,18 +10,21 @@ A collection of command-line samples for the AdSense Management API.
   or use pip:
 
   ```bash
-  $ pip install google-api-python-client```
+  $ pip install google-api-python-client
+  ```
 
 2. Make sure you can import the client library:
 
   ```
   $ python
-  >>> import apiclient```
+  >>> import apiclient
+  ```
 
 3. Execute any of the scripts to begin the auth flow:
 
   ```bash
-  $ python get_all_accounts.py```
+  $ python get_all_accounts.py
+  ```
 
   A browser window will open and ask you to login. Use the AdSense account.
 
