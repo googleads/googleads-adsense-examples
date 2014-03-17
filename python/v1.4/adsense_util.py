@@ -47,8 +47,7 @@ def get_account_id(service):
 
 
 def fill_date_gaps(result):
-  """Fills gaps and sorts the result object. Doesn't fill "WEEK" or "MONTH"
-  dimensions.
+  """Fills gaps and sorts the result object. Doesn't fill "WEEK" dimension.
 
   Returns the same structure with dummy rows for non-existing dates.
 
@@ -128,7 +127,7 @@ def fill_date_gaps(result):
 
 
 def _months_delta(to_date, from_date):
-  """Check how many months, inclusive, between two months
+  """Check how many months, inclusive, between two months.
 
   Returns the number of months as an integer.
 
