@@ -20,15 +20,17 @@
 #
 # This example gets all ad clients for the logged in user's default account.
 #
-# Tags: adclients.list
+# Tags: accounts.adclients.list
 
-require 'adsense_common'
+require_relative 'adsense_common'
 
 # The maximum number of results to be returned in a page.
 MAX_PAGE_SIZE = 50
 
 def get_all_ad_clients(adsense)
-  request = adsense.adclients.list(:maxResults => MAX_PAGE_SIZE)
+  account_id = choose_account(adsense)
+  request = adsense.accounts.adclients.list(:accountId => account_id,
+      :maxResults => MAX_PAGE_SIZE)
 
   loop do
     result = request.execute

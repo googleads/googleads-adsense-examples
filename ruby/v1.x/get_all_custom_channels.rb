@@ -22,16 +22,17 @@
 #
 # To get ad clients, run get_all_ad_clients.rb.
 #
-# Tags: customchannels.list
+# Tags: accounts.customchannels.list
 
-require 'adsense_common'
+require_relative 'adsense_common'
 
 # The maximum number of results to be returned in a page.
 MAX_PAGE_SIZE = 50
 
-def get_all_custom_channels(adsense, ad_client_id)
-  request = adsense.customchannels.list(:adClientId => ad_client_id,
-                                        :maxResults => MAX_PAGE_SIZE)
+def get_all_custom_channels(adsense, account_id, ad_client_id)
+  request = adsense.accounts.customchannels.list(
+      :accountId => account_id, :adClientId => ad_client_id,
+      :maxResults => MAX_PAGE_SIZE)
 
   loop do
     result = request.execute
@@ -41,19 +42,19 @@ def get_all_custom_channels(adsense, ad_client_id)
         [custom_channel.id, custom_channel.name]
 
       if custom_channel['targetingInfo']
-        puts '  Targeting info:'
+        puts "\tTargeting info:"
         targeting_info = custom_channel.targetingInfo
         if targeting_info['adsAppearOn']
-          puts '    Ads appear on: %s' % targeting_info.adsAppearOn
+          puts "\t\tAds appear on: %s" % targeting_info.adsAppearOn
         end
         if targeting_info['location']
-          puts '    Location: %s' % targeting_info.location
+          puts "\t\tLocation: %s" % targeting_info.location
         end
         if targeting_info['description']
-          puts '    Description: %s' % targeting_info.description
+          puts "\t\tDescription: %s" % targeting_info.description
         end
         if targeting_info['siteLanguage']
-          puts '    Site language: %s' % targeting_info.siteLanguage
+          puts "\t\tSite language: %s" % targeting_info.siteLanguage
         end
       end
     end
@@ -67,12 +68,12 @@ end
 if __FILE__ == $0
   adsense = service_setup()
 
-  unless ARGV.size == 1
-    puts "Usage: #{$0} AD_CLIENT_ID"
+  unless ARGV.size == 2
+    puts "Usage: #{$0} ACCOUNT_ID AD_CLIENT_ID"
     exit
   end
 
-  ad_client_id = ARGV.first
+  account_id, ad_client_id = ARGV
 
-  get_all_custom_channels(adsense, ad_client_id)
+  get_all_custom_channels(adsense, account_id, ad_client_id)
 end

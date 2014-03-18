@@ -22,27 +22,30 @@
 #
 # To get ad clients, run get_all_ad_clients.rb.
 #
-# Tags: reports.generate, reports.saved.generate
+# Tags: accounts.reports.generate, accounts.reports.saved.generate
 
-require 'adsense_common'
+require_relative 'adsense_common'
 require 'optparse'
 
 def generate_report(adsense, options)
   ad_client_id = options[:ad_client_id]
   saved_report_id = options[:report_id]
+  account_id = choose_account(adsense)
 
   result = nil
   if saved_report_id
     # Generate a report from a saved report ID.
-    result = adsense.reports.saved.generate(
+    result = adsense.accounts.reports.saved.generate(
+      :accountId => account_id,
       :savedReportId => saved_report_id
     ).execute
   else
     # Generate a new report for the provided ad client ID.
-    result = adsense.reports.generate(
-      :startDate => '2011-01-01',
+    result = adsense.accounts.reports.generate(
+      :accountId => account_id,
+      :startDate => '2014-01-01',
       :filter => ['AD_CLIENT_ID==' + ad_client_id],
-      :endDate => '2011-08-31',
+      :endDate => '2014-08-31',
       :metric => ['PAGE_VIEWS', 'AD_REQUESTS', 'AD_REQUESTS_COVERAGE',
                   'CLICKS', 'AD_REQUESTS_CTR', 'COST_PER_CLICK',
                   'AD_REQUESTS_RPM', 'EARNINGS'],

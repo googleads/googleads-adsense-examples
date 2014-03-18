@@ -22,16 +22,17 @@
 #
 # To get ad clients, run get_all_ad_clients.rb.
 #
-# Tags: urlchannels.list
+# Tags: accounts.urlchannels.list
 
-require 'adsense_common'
+require_relative 'adsense_common'
 
 # The maximum number of results to be returned in a page.
 MAX_PAGE_SIZE = 50
 
-def get_all_url_channels(adsense, ad_client_id)
-  request = adsense.urlchannels.list(:adClientId => ad_client_id,
-                                     :maxResults => MAX_PAGE_SIZE)
+def get_all_url_channels(adsense, account_id, ad_client_id)
+  request = adsense.accounts.urlchannels.list(
+      :accountId => account_id, :adClientId => ad_client_id,
+      :maxResults => MAX_PAGE_SIZE)
 
   loop do
     result = request.execute
@@ -50,12 +51,12 @@ end
 if __FILE__ == $0
   adsense = service_setup()
 
-  unless ARGV.size == 1
-    puts "Usage: #{$0} AD_CLIENT_ID"
+  unless ARGV.size == 2
+    puts "Usage: #{$0} ACCOUNT_ID AD_CLIENT_ID"
     exit
   end
 
-  ad_client_id = ARGV.first
+  account_id, ad_client_id = ARGV
 
-  get_all_url_channels(adsense, ad_client_id)
+  get_all_url_channels(adsense, account_id, ad_client_id)
 end

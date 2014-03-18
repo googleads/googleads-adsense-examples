@@ -25,7 +25,7 @@
 #
 # Tags: accounts.adunits.customchannels.list
 
-require 'adsense_common'
+require_relative 'adsense_common'
 
 # The maximum number of results to be returned in a page.
 MAX_PAGE_SIZE = 50
@@ -48,19 +48,19 @@ def get_all_custom_channels_for_ad_unit(adsense, account_id, ad_client_id,
         [custom_channel.code, custom_channel.name]
 
       if custom_channel['targetingInfo']
-        puts '  Targeting info:'
+        puts "\tTargeting info:"
         targeting_info = custom_channel.targetingInfo
         if targeting_info['adsAppearOn']
-          puts '    Ads appear on: %s' % targeting_info.adsAppearOn
+          puts "\t\tAds appear on: %s" % targeting_info.adsAppearOn
         end
         if targeting_info['location']
-          puts '    Location: %s' % targeting_info.location
+          puts "\t\tLocation: %s" % targeting_info.location
         end
         if targeting_info['description']
-          puts '    Description: %s' % targeting_info.description
+          puts "\t\tDescription: %s" % targeting_info.description
         end
         if targeting_info['siteLanguage']
-          puts '    Site language: %s' % targeting_info.siteLanguage
+          puts "\t\tSite language: %s" % targeting_info.siteLanguage
         end
       end
     end
