@@ -21,15 +21,17 @@
 # This example gets all the saved reports for the logged in user's default
 # account.
 #
-# Tags: savedreports.list
+# Tags: accounts.savedreports.list
 
-require 'adsense_common'
+require_relative 'adsense_common'
 
 # The maximum number of results to be returned in a page.
 MAX_PAGE_SIZE = 50
 
 def get_all_saved_reports(adsense)
-  request = adsense.reports.saved.list(:maxResults => MAX_PAGE_SIZE)
+  account_id = choose_account(adsense)
+  request = adsense.accounts.reports.saved.list(:accountId => account_id,
+      :maxResults => MAX_PAGE_SIZE)
 
   loop do
     result = request.execute

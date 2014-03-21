@@ -23,7 +23,7 @@
 #
 # Tags: accounts.get
 
-require 'adsense_common'
+require_relative 'adsense_common'
 
 # The maximum number of results to be returned in a page.
 MAX_PAGE_SIZE = 50

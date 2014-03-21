@@ -20,7 +20,6 @@
 #
 # Handles common tasks across all AdSense Management API samples.
 
-require 'rubygems'
 require 'google/api_client'
 require 'google/api_client/service'
 require 'google/api_client/client_secrets'
@@ -78,4 +77,30 @@ def service_setup()
   )
 
   return service
+end
+
+# Lists all AdSense accounts the user has access to, and prompts them to choose
+# one. Returns the account ID.
+def choose_account(adsense)
+  result = adsense.accounts.list().execute()
+  account = nil
+
+  if !result || !result.data || result.data.items.empty?
+    puts 'No AdSense accounts found. Exiting.'
+    exit
+  elsif result.data.items.length == 1
+    account = result.data.items.first
+    puts 'Only one account found (%s), using it.' % account.id
+  else
+    puts 'Please choose one of the following options: '
+    result.data.items.each_with_index do |acc,i|
+      puts '%d. %s (%s)' % [i + 1, acc.name, acc.id]
+    end
+    print '> '
+    account_index = Integer(gets.chomp) - 1
+    account = result.data.items[account_index]
+    puts 'Account %s chosen, resuming.' % account.id
+  end
+
+  return account.id
 end

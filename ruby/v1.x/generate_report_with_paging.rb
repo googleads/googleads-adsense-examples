@@ -27,9 +27,9 @@
 # reports.
 # To get ad clients, run get_all_ad_clients.rb.
 #
-# Tags: reports.generate
+# Tags: accounts.reports.generate
 
-require 'adsense_common'
+require_relative 'adsense_common'
 
 # The maximum number of rows per page.
 MAX_PAGE_SIZE = 50
@@ -37,14 +37,16 @@ MAX_PAGE_SIZE = 50
 ROW_LIMIT = 5000
 
 def generate_report_with_paging(adsense, ad_client_id)
+  account_id = choose_account(adsense)
   start_index = 0
   rows_to_obtain = MAX_PAGE_SIZE
 
   loop do
-    result = adsense.reports.generate(
-      :startDate => '2011-01-01',
+    result = adsense.accounts.reports.generate(
+      :accountId => account_id,
+      :startDate => '2014-01-01',
       :filter => ['AD_CLIENT_ID==' + ad_client_id],
-      :endDate => '2011-08-31',
+      :endDate => '2014-08-31',
       :metric => ['PAGE_VIEWS', 'AD_REQUESTS', 'AD_REQUESTS_COVERAGE',
                   'CLICKS', 'AD_REQUESTS_CTR', 'COST_PER_CLICK',
                   'AD_REQUESTS_RPM', 'EARNINGS'],
