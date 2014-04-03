@@ -10,6 +10,10 @@ Install the Java client library with all the dependencies for AdSense Management
 
 https://developers.google.com/api-client-library/java/apis/
 
+Register your app with the Google Cloud Console
+
+http://developer.android.com/google/auth/http-auth.html#Register
+
 Features:
 * Inventory view of the selected account (sub-accounts, ad clients, ad units and custom channels)
 * Simple report that fetches the earnings for the last 6 months
