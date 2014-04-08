@@ -22,7 +22,7 @@ import com.google.api.services.adsense.model.AdUnits;
 *
 * This example gets all ad units in an ad client.
 *
-* Tags: adunits.list
+* Tags: accounts.adunits.list
 *
 * @author sgomes@google.com (Sérgio Gomes)
 *
@@ -33,12 +33,14 @@ public class GetAllAdUnits {
    * Runs this sample.
    *
    * @param adsense AdSense service object on which to run the requests.
+   * @param accountId the ID for the account to be used.
    * @param adClientId the ID for the ad client to be used.
    * @param maxPageSize the maximum page size to retrieve.
    * @return the last page of ad units.
    * @throws Exception
    */
-  public static AdUnits run(AdSense adsense, String adClientId, int maxPageSize) throws Exception {
+  public static AdUnits run(AdSense adsense, String accountId, String adClientId, int maxPageSize)
+      throws Exception {
     System.out.println("=================================================================");
     System.out.printf("Listing all ad units for ad client %s\n", adClientId);
     System.out.println("=================================================================");
@@ -47,7 +49,7 @@ public class GetAllAdUnits {
     String pageToken = null;
     AdUnits adUnits = null;
     do {
-      adUnits = adsense.adunits().list(adClientId)
+      adUnits = adsense.accounts().adunits().list(accountId, adClientId)
           .setMaxResults(maxPageSize)
           .setPageToken(pageToken)
           .execute();

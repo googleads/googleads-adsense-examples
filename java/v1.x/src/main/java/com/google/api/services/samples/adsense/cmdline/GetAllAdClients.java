@@ -20,9 +20,9 @@ import com.google.api.services.adsense.model.AdClients;
 
 /**
 *
-* This example gets all ad clients for the logged in user's default account.
+* This example gets all ad clients for the specified account.
 *
-* Tags: adclients.list
+* Tags: accounts.adclients.list
 *
 * @author sgomes@google.com (Sérgio Gomes)
 *
@@ -33,20 +33,20 @@ public class GetAllAdClients {
    * Runs this sample.
    *
    * @param adsense AdSense service object on which to run the requests.
+   * @param accountId the ID for the account to be used.
    * @param maxPageSize the maximum page size to retrieve.
-   * @return the last page of retrieved ad clients.
    * @throws Exception
    */
-  public static AdClients run(AdSense adsense, int maxPageSize) throws Exception {
+  public static AdClients run(AdSense adsense, String accountId, int maxPageSize) throws Exception {
     System.out.println("=================================================================");
-    System.out.println("Listing all ad clients for default account");
+    System.out.printf("Listing all ad clients for account %s\n", accountId);
     System.out.println("=================================================================");
 
     // Retrieve ad client list in pages and display data as we receive it.
     String pageToken = null;
     AdClients adClients = null;
     do {
-      adClients = adsense.adclients().list()
+      adClients = adsense.accounts().adclients().list(accountId)
           .setMaxResults(maxPageSize)
           .setPageToken(pageToken)
           .execute();

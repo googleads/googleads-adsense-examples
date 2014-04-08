@@ -22,7 +22,7 @@ import com.google.api.services.adsense.model.UrlChannels;
 *
 * This example gets all URL channels in an ad client.
 *
-* Tags: urlchannels.list
+* Tags: accounts.urlchannels.list
 *
 * @author sgomes@google.com (Sérgio Gomes)
 *

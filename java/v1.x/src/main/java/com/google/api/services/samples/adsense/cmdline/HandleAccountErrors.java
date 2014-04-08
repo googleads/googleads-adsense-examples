@@ -24,7 +24,7 @@ import java.util.List;
  *
  * This example shows how to handle different AdSense account errors.
  *
- * Tags: adclients.list
+ * Tags: accounts.adclients.list
  *
  * @author sgomes@google.com (Sérgio Gomes)
  *
@@ -35,17 +35,18 @@ public class HandleAccountErrors {
    * Runs this sample.
    *
    * @param service AdSense service object on which to run the requests.
+   * @param accountId the ID for the account to be used.
    * @param maxPageSize the maximum page size to retrieve.
    * @throws Exception
    */
-  public static void run(AdSense service, int maxPageSize) throws Exception {
+  public static void run(AdSense service, String accountId, int maxPageSize) throws Exception {
     System.out.println("=================================================================");
     System.out.println("Testing error handling");
     System.out.println("=================================================================");
 
     try {
       // Attempt API call.
-      service.adclients().list().setMaxResults(maxPageSize).execute();
+      service.accounts().adclients().list(accountId).setMaxResults(maxPageSize).execute();
 
       System.out.println("The call succeeded. Please use an invalid, disapproved or " +
           "approval-pending AdSense account to test error handling.");

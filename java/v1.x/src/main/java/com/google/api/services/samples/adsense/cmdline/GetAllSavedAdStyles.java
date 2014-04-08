@@ -20,9 +20,9 @@ import com.google.api.services.adsense.model.SavedAdStyles;
 
 /**
  *
- * This example gets all saved ad styles for the default account.
+ * This example gets all saved ad styles for the specified account.
  *
- * Tags: savedadstyles.list
+ * Tags: accounts.savedadstyles.list
  *
  * @author jalc@google.com (Jose Alcérreca)
  *
@@ -33,21 +33,22 @@ public class GetAllSavedAdStyles {
    * Runs this sample.
    *
    * @param adsense AdSense service object on which to run the requests.
+   * @param accountId the ID for the account to be used.
    * @param maxPageSize the maximum page size to retrieve.
    * @return the last page of ad styles.
    * @throws Exception
    */
-  public static SavedAdStyles run(AdSense adsense, int maxPageSize) throws Exception {
+  public static SavedAdStyles run(AdSense adsense, String accountId, int maxPageSize)
+      throws Exception {
     System.out.println("=================================================================");
-    System.out.printf("Listing all saved ad styles for default account\n");
+    System.out.printf("Listing all saved ad styles for account %s\n", accountId);
     System.out.println("=================================================================");
 
     // Retrieve saved ad style list and display the data as we receive it.
     String pageToken = null;
     SavedAdStyles savedAdStyles = null;
     do {
-      savedAdStyles = adsense.savedadstyles()
-          .list()
+      savedAdStyles = adsense.accounts().savedadstyles().list(accountId)
           .setMaxResults(maxPageSize)
           .setPageToken(pageToken)
           .execute();

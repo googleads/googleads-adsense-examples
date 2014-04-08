@@ -20,7 +20,7 @@ import com.google.api.services.adsense.model.ReportingMetadataEntry;
 
 /**
 *
-* Gets all dimensions available for the logged in user's default account.
+* Gets all dimensions available for the logged in user.
 *
 * Tags: metadata.dimensions.list
 *
@@ -37,7 +37,7 @@ public class GetAllDimensions {
    */
   public static void run(AdSense adsense) throws Exception {
     System.out.println("=================================================================");
-    System.out.println("Listing all dimensions for default account");
+    System.out.println("Listing all dimensions for user");
     System.out.println("=================================================================");
 
     // Retrieve and display dimensions.

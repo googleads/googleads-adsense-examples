@@ -15,7 +15,7 @@
 package com.google.api.services.samples.adsense.cmdline;
 
 import com.google.api.services.adsense.AdSense;
-import com.google.api.services.adsense.AdSense.Reports.Saved.Generate;
+import com.google.api.services.adsense.AdSense.Accounts.Reports.Saved.Generate;
 import com.google.api.services.adsense.model.AdsenseReportsGenerateResponse;
 
 import java.text.DateFormat;
@@ -25,9 +25,9 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * This example retrieves a saved report for the default account.
+ * This example retrieves a saved report for the specified account.
  *
- * Tags: reports.saved.generate
+ * Tags: accounts.reports.saved.generate
  *
  * @author jalc@google.com (Jose Alcérreca)
  *
@@ -40,12 +40,13 @@ public class GenerateSavedReport {
    * Runs this sample.
    *
    * @param adsense AdSense service object on which to run the requests.
+   * @param accountId the ID for the account to be used.
    * @param savedReportId the saved report ID on which to run the report.
    * @throws Exception
    */
-  public static void run(AdSense adsense, String savedReportId) throws Exception {
+  public static void run(AdSense adsense, String accountId, String savedReportId) throws Exception {
     System.out.println("=================================================================");
-    System.out.printf("Running saved report %s\n", savedReportId);
+    System.out.printf("Running saved report %s on account %s\n", savedReportId, accountId);
     System.out.println("=================================================================");
 
     // Prepare report.
@@ -53,7 +54,7 @@ public class GenerateSavedReport {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(today);
     calendar.add(Calendar.DATE, -7);
-    Generate request = adsense.reports().saved().generate(savedReportId);
+    Generate request = adsense.accounts().reports().saved().generate(accountId, savedReportId);
 
     // Run saved report.
     AdsenseReportsGenerateResponse response = request.execute();

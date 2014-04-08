@@ -22,7 +22,7 @@ import com.google.api.services.adsense.model.CustomChannels;
 *
 * This example gets all custom channels an ad unit has been added to.
 *
-* Tags: adunits.customchannels.list
+* Tags: accounts.adunits.customchannels.list
 *
 * @author sgomes@google.com (Sérgio Gomes)
 *
@@ -33,12 +33,13 @@ public class GetAllCustomChannelsForAdUnit {
    * Runs this sample.
    *
    * @param adsense AdSense service object on which to run the requests.
+   * @param accountId the ID for the account to be used.
    * @param adClientId the ID for the ad client to be used.
    * @param adUnitId the ID for the ad unit to be used.
    * @param maxPageSize the maximum page size to retrieve.
    * @throws Exception
    */
-  public static void run(AdSense adsense, String adClientId, String adUnitId,
+  public static void run(AdSense adsense, String accountId, String adClientId, String adUnitId,
       int maxPageSize) throws Exception {
     System.out.println("=================================================================");
     System.out.printf("Listing all custom channels for ad unit %s\n", adUnitId);
@@ -47,10 +48,11 @@ public class GetAllCustomChannelsForAdUnit {
     // Retrieve custom channel list in pages and display the data as we receive it.
     String pageToken = null;
     do {
-      CustomChannels customChannels = adsense.adunits().customchannels().list(adClientId, adUnitId)
-          .setMaxResults(maxPageSize)
-          .setPageToken(pageToken)
-          .execute();
+      CustomChannels customChannels =
+          adsense.accounts().adunits().customchannels().list(accountId, adClientId, adUnitId)
+              .setMaxResults(maxPageSize)
+              .setPageToken(pageToken)
+              .execute();
 
       if (customChannels.getItems() != null && !customChannels.getItems().isEmpty()) {
         for (CustomChannel channel : customChannels.getItems()) {

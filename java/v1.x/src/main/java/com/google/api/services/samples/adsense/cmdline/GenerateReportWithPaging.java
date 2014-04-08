@@ -15,7 +15,7 @@
 package com.google.api.services.samples.adsense.cmdline;
 
 import com.google.api.services.adsense.AdSense;
-import com.google.api.services.adsense.AdSense.Reports.Generate;
+import com.google.api.services.adsense.AdSense.Accounts.Reports.Generate;
 import com.google.api.services.adsense.model.AdsenseReportsGenerateResponse;
 
 import java.text.DateFormat;
@@ -32,7 +32,7 @@ import java.util.List;
  * If you need to retrieve more than 5000 rows, please check GenerateReport.java, as due to current
  * limitations you will not be able to use paging for large reports.
  *
- * Tags: reports.generate
+ * Tags: accounts.reports.generate
  *
  * @author sgomes@google.com (Sérgio Gomes)
  *
@@ -48,12 +48,13 @@ public class GenerateReportWithPaging {
    * Runs this sample.
    *
    * @param adsense AdSense service object on which to run the requests.
+   * @param accountId the ID for the account to be used.
    * @param adClientId the ad client ID on which to run the report.
    * @param maxReportPageSize the maximum size page to retrieve.
    * @throws Exception
    */
-  public static void run(AdSense adsense, String adClientId, int maxReportPageSize)
-      throws Exception {
+  public static void run(AdSense adsense, String accountId, String adClientId,
+      int maxReportPageSize) throws Exception {
     System.out.println("=================================================================");
     System.out.printf("Running report for ad client %s\n", adClientId);
     System.out.println("=================================================================");
@@ -67,7 +68,7 @@ public class GenerateReportWithPaging {
 
     String startDate = DATE_FORMATTER.format(oneWeekAgo);
     String endDate = DATE_FORMATTER.format(today);
-    Generate request = adsense.reports().generate(startDate, endDate);
+    Generate request = adsense.accounts().reports().generate(accountId, startDate, endDate);
 
     // Specify the desired ad client using a filter.
     request.setFilter(Arrays.asList("AD_CLIENT_ID==" + escapeFilterParameter(adClientId)));

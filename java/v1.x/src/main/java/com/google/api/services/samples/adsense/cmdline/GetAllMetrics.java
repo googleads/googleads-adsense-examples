@@ -20,7 +20,7 @@ import com.google.api.services.adsense.model.ReportingMetadataEntry;
 
 /**
 *
-* Gets all metrics available for the logged in user's default account.
+* Gets all metrics available for the logged in user.
 *
 * Tags: metadata.metrics.list
 *
@@ -37,7 +37,7 @@ public class GetAllMetrics {
    */
   public static void run(AdSense adsense) throws Exception {
     System.out.println("=================================================================");
-    System.out.println("Listing all metrics for default account");
+    System.out.println("Listing all metrics for user");
     System.out.println("=================================================================");
 
     // Retrieve and display metrics.

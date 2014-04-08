@@ -22,7 +22,7 @@ import com.google.api.services.adsense.model.CustomChannels;
 *
 * This example gets all custom channels in an ad client.
 *
-* Tags: customchannels.list
+* Tags: accounts.customchannels.list
 *
 * @author sgomes@google.com (Sérgio Gomes)
 *
@@ -33,13 +33,14 @@ public class GetAllCustomChannels {
    * Runs this sample.
    *
    * @param adsense AdSense service object on which to run the requests.
+   * @param accountId the ID for the account to be used.
    * @param adClientId the ID for the ad client to be used.
    * @param maxPageSize the maximum page size to retrieve.
    * @return the last page of custom channels.
    * @throws Exception
    */
-  public static CustomChannels run(AdSense adsense, String adClientId, int maxPageSize)
-      throws Exception {
+  public static CustomChannels run(AdSense adsense, String accountId, String adClientId,
+      int maxPageSize) throws Exception {
     System.out.println("=================================================================");
     System.out.printf("Listing all custom channels for ad client %s\n", adClientId);
     System.out.println("=================================================================");
@@ -48,7 +49,7 @@ public class GetAllCustomChannels {
     String pageToken = null;
     CustomChannels customChannels = null;
     do {
-      customChannels = adsense.customchannels().list(adClientId)
+      customChannels = adsense.accounts().customchannels().list(accountId, adClientId)
           .setMaxResults(maxPageSize)
           .setPageToken(pageToken)
           .execute();

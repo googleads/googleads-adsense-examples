@@ -20,9 +20,9 @@ import com.google.api.services.adsense.model.Alerts;
 
 /**
 *
-* Gets all alerts available for the logged in user's default account.
+* Gets all alerts available for the specified account.
 *
-* Tags: alerts.list
+* Tags: accounts.alerts.list
 *
 * @author sgomes@google.com (Sérgio Gomes)
 *
@@ -33,15 +33,16 @@ public class GetAllAlerts {
    * Runs this sample.
    *
    * @param adsense AdSense service object on which to run the requests.
+   * @param accountId the ID for the account to be used.
    * @throws Exception
    */
-  public static void run(AdSense adsense) throws Exception {
+  public static void run(AdSense adsense, String accountId) throws Exception {
     System.out.println("=================================================================");
-    System.out.println("Listing all alerts for default account");
+    System.out.printf("Listing all alerts for account %s\n", accountId);
     System.out.println("=================================================================");
 
     // Retrieve and display alerts.
-    Alerts alerts = adsense.alerts().list().execute();
+    Alerts alerts = adsense.accounts().alerts().list(accountId).execute();
 
     if (alerts.getItems() != null && !alerts.getItems().isEmpty()) {
       for (Alert alert : alerts.getItems()) {

@@ -15,49 +15,36 @@
 package com.google.api.services.samples.adsense.cmdline;
 
 import com.google.api.services.adsense.AdSense;
-import com.google.api.services.adsense.AdSense.Reports.Generate;
+import com.google.api.services.adsense.AdSense.Accounts.Reports.Generate;
 import com.google.api.services.adsense.model.AdsenseReportsGenerateResponse;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
  * This example retrieves a report, using a filter for a specified ad client.
  *
- * Tags: reports.generate
+ * Tags: accounts.reports.generate
  *
  * @author sgomes@google.com (Sérgio Gomes)
  *
  */
 public class GenerateReport {
-
-  static final DateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
-
   /**
    * Runs this sample.
    * @param adsense AdSense service object on which to run the requests.
+   * @param accountId the ID for the account to be used.
    * @param adClientId the ad client ID on which to run the report.
    * @throws Exception
    */
-  public static void run(AdSense adsense, String adClientId) throws Exception {
+  public static void run(AdSense adsense, String accountId, String adClientId) throws Exception {
     System.out.println("=================================================================");
     System.out.printf("Running report for ad client %s\n", adClientId);
     System.out.println("=================================================================");
 
-    // Prepare report.
-    Date today = new Date();
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(today);
-    calendar.add(Calendar.DATE, -7);
-    Date oneWeekAgo = calendar.getTime();
-
-    String startDate = DATE_FORMATTER.format(oneWeekAgo);
-    String endDate = DATE_FORMATTER.format(today);
-    Generate request = adsense.reports().generate(startDate, endDate);
+    String startDate = "today-7d";
+    String endDate = "today-1d";
+    Generate request = adsense.accounts().reports().generate(accountId, startDate, endDate);
 
     // Specify the desired ad client using a filter.
     request.setFilter(Arrays.asList("AD_CLIENT_ID==" + escapeFilterParameter(adClientId)));
@@ -71,8 +58,9 @@ public class GenerateReport {
 
     // Run report.
     AdsenseReportsGenerateResponse response = request.execute();
+    List<List<String>> rows = AdSenseSample.fillMissingDates(response);
 
-    if (response.getRows() != null && !response.getRows().isEmpty()) {
+    if (rows != null && !rows.isEmpty()) {
       // Display headers.
       for (AdsenseReportsGenerateResponse.Headers header : response.getHeaders()) {
         System.out.printf("%25s", header.getName());
@@ -80,7 +68,7 @@ public class GenerateReport {
       System.out.println();
 
       // Display results.
-      for (List<String> row : response.getRows()) {
+      for (List<String> row : rows) {
         for (String column : row) {
           System.out.printf("%25s", column);
         }

@@ -20,9 +20,9 @@ import com.google.api.services.adsense.model.SavedReports;
 
 /**
  *
- * This example gets all saved reports for an account.
+ * This example gets all saved reports for the specified account.
  *
- * Tags: reports.saved.list
+ * Tags: accounts.reports.saved.list
  *
  * @author jalc@google.com (Jose Alcérreca)
  *
@@ -33,22 +33,22 @@ public class GetAllSavedReports {
    * Runs this sample.
    *
    * @param adsense AdSense service object on which to run the requests.
+   * @param accountId the ID for the account to be used.
    * @param maxPageSize the maximum page size to retrieve.
    * @return the last page of saved reports.
    * @throws Exception
    */
-  public static SavedReports run(AdSense adsense, int maxPageSize) throws Exception {
+  public static SavedReports run(AdSense adsense, String accountId, int maxPageSize)
+      throws Exception {
     System.out.println("=================================================================");
-    System.out.printf("Listing all saved reports for default account\n");
+    System.out.printf("Listing all saved reports for account %s\n", accountId);
     System.out.println("=================================================================");
 
     // Retrieve saved report list in pages and display the data as we receive it.
     String pageToken = null;
     SavedReports savedReports = null;
     do {
-      savedReports = adsense.reports()
-          .saved()
-          .list()
+      savedReports = adsense.accounts().reports().saved().list(accountId)
           .setMaxResults(maxPageSize)
           .setPageToken(pageToken)
           .execute();
