@@ -25,10 +25,12 @@ __author__ = 'jalc@google.com (Jose Alcerreca)'
 
 import argparse
 import sys
+
+from adsense_util import get_account_id
+from adsense_util_data_collator import DataCollator
 from apiclient import sample_tools
 from oauth2client import client
-from adsense_util import fill_date_gaps
-from adsense_util import get_account_id
+
 
 # Declare command-line flags.
 argparser = argparse.ArgumentParser(add_help=False)
@@ -56,14 +58,14 @@ def main(argv):
           accountId=account_id, savedReportId=saved_report_id).execute()
     else:
       result = service.accounts().reports().generate(
-          accountId=account_id, startDate='today-1y', endDate='today',
+          accountId=account_id, startDate='today-2m', endDate='today',
           metric=['PAGE_VIEWS', 'AD_REQUESTS', 'AD_REQUESTS_COVERAGE',
                   'CLICKS', 'AD_REQUESTS_CTR', 'COST_PER_CLICK',
                   'AD_REQUESTS_RPM', 'EARNINGS'],
-          dimension=['DATE', 'MONTH', 'WEEK'],
-          sort=['+DATE']).execute()
+          dimension=['MONTH', 'PLATFORM_TYPE_NAME'],
+          sort=['+MONTH']).execute()
 
-    result = fill_date_gaps(result)
+    result = DataCollator([result]).collate_data()
 
     # Display headers.
     for header in result['headers']:
@@ -73,7 +75,7 @@ def main(argv):
     # Display results.
     for row in result['rows']:
       for column in row:
-        print '%25s' % column,
+        print '%25s' % column
       print
 
     # Display date range.
