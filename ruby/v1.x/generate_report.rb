@@ -44,12 +44,12 @@ def generate_report(adsense, options)
     result = adsense.accounts.reports.generate(
       :accountId => account_id,
       :startDate => '2014-01-01',
-      :filter => ['AD_CLIENT_ID==' + ad_client_id],
-      :endDate => '2014-08-31',
+      :endDate => '2014-01-31',
       :metric => ['PAGE_VIEWS', 'AD_REQUESTS', 'AD_REQUESTS_COVERAGE',
                   'CLICKS', 'AD_REQUESTS_CTR', 'COST_PER_CLICK',
                   'AD_REQUESTS_RPM', 'EARNINGS'],
       :dimension => ['DATE'],
+      :filter => ['AD_CLIENT_ID==' + ad_client_id],
       :sort => ['+DATE']
     ).execute
   end
@@ -60,8 +60,11 @@ def generate_report(adsense, options)
   end
   puts
 
+  # Fill in missing dates in results.
+  data_rows = fill_missing_dates(result)
+
   # Display results.
-  result.data.rows.each do |row|
+  data_rows.each do |row|
     row.each do |column|
       print '%25s' % column
     end
