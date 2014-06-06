@@ -132,6 +132,7 @@ namespace AdSense.Sample
 
                 GenerateReport(exampleAdClient.Id);
                 GenerateReportWithPaging(exampleAdClient.Id);
+                CollateReportData();
             }
 
             DisplayAllMetricsAndDimensions();
@@ -874,6 +875,148 @@ namespace AdSense.Sample
             else
             {
                 Console.WriteLine("No payments found.");
+            }
+
+            Console.WriteLine();
+        }
+
+        /// <summary>Retrieves two reports and collates data between them.</summary>
+        private void CollateReportData()
+        {
+            Console.WriteLine("=================================================================");
+            Console.WriteLine("Running reports and collating data");
+            Console.WriteLine("=================================================================");
+
+            var today = DateTime.Today;
+
+            // Prepare report.
+            var lastWeekReportRequest = service.Accounts.Reports.Generate(
+                adSenseAccount.Id,
+                today.AddDays(-6).ToString(DateFormat),
+                today.ToString(DateFormat));
+            var prevWeekReportRequest = service.Accounts.Reports.Generate(
+                adSenseAccount.Id,
+                today.AddDays(-13).ToString(DateFormat),
+                today.AddDays(-7).ToString(DateFormat));
+            var pageSize = maxListPageSize;
+
+            lastWeekReportRequest.Metric = new List<string> { "PAGE_VIEWS", "EARNINGS" };
+            prevWeekReportRequest.Metric = new List<string> { "PAGE_VIEWS", "EARNINGS" };
+
+            lastWeekReportRequest.Dimension = new List<string> { "PLATFORM_TYPE_CODE", "PLATFORM_TYPE_NAME" };
+            prevWeekReportRequest.Dimension = new List<string> { "PLATFORM_TYPE_CODE", "PLATFORM_TYPE_NAME" };
+
+            lastWeekReportRequest.Sort = new List<string> { "+PLATFORM_TYPE_CODE" };
+            prevWeekReportRequest.Sort = new List<string> { "+PLATFORM_TYPE_CODE" };
+
+            // Run reports.
+            var lastWeekResponse = lastWeekReportRequest.Execute();
+            var prevWeekResponse = prevWeekReportRequest.Execute();
+
+            AdsenseReportsGenerateResponse[] responses = { lastWeekResponse, prevWeekResponse };
+
+            if (lastWeekResponse.Rows.IsNullOrEmpty() && prevWeekResponse.Rows.IsNullOrEmpty())
+            {
+                Console.WriteLine("No rows returned.");
+                Console.WriteLine();
+                return;
+            }
+
+            // Create new lists for filled data with the existing data in the responses.
+            var lastRows = new List<IList<String>>();
+            var prevRows = new List<IList<String>>();
+
+            // Add existing data to new lists.
+            if (!lastWeekResponse.Rows.IsNullOrEmpty())
+            {
+                lastRows.InsertRange(0, lastWeekResponse.Rows);
+            }
+            if (!prevWeekResponse.Rows.IsNullOrEmpty())
+            {
+                prevRows.InsertRange(0, prevWeekResponse.Rows);
+            }
+
+            // Compile complete set of platforms and platform codes across both report responses.
+            var platformNames = new Dictionary<String, String>();
+            foreach (var response in responses) {
+                if (!response.Rows.IsNullOrEmpty()) {
+                    foreach (var row in response.Rows) {
+                        if (!platformNames.ContainsKey(row[0]))
+                        {
+                            platformNames.Add(row[0], row[1]);
+                        }
+                    }
+                }
+            }
+            var platforms = platformNames.Keys;
+
+            // How many metrics have we got?
+            int metrics = 0;
+            if (lastRows.Count > 0) {
+                // Subtracting 2 to skip headers for dimensions.
+                metrics = lastRows[0].Count - 2;
+            } else if (prevRows.Count > 0) {
+                // Subtracting 2 to skip headers for dimensions.
+                metrics = prevRows[0].Count - 2;
+            }
+
+            // Add missing data to both datasets.
+            var datasets = new List<IList<String>>[] {lastRows, prevRows};
+
+            foreach (var dataset in datasets) {
+                if (dataset.Count < platforms.Count) {
+                // Compile list of platforms in this dataset.
+                var datasetPlatforms = new List<String>();
+                foreach (var row in dataset) {
+                    datasetPlatforms.Add(row[0]);
+                }
+
+                // Compile list of missing platforms in this dataset.
+                var missing = new List<String>(platforms);
+                missing.RemoveAll(item => datasetPlatforms.Contains(item));
+
+                // Add data for all missing platforms.
+                foreach (String platform in missing) {
+                    var newRow = new List<String>();
+                    // Add platform code and name.
+                    newRow.Add(platform);
+                    newRow.Add(platformNames[platform]);
+                    // Add metrics.
+                    for (int i = 0; i < metrics; i++) {
+                        newRow.Add("0");
+                    }
+                    dataset.Add(newRow);
+                }
+
+                // Sort dataset.
+                dataset.Sort((x, y) => x[0].CompareTo(y[0]));
+                }
+            }
+            // Display effective date range.
+            Console.WriteLine("Results for last week ({0} to {1}) versus the previous week ({2} to {3}).\n",
+                lastWeekResponse.StartDate,
+                lastWeekResponse.EndDate,
+                prevWeekResponse.StartDate,
+                prevWeekResponse.EndDate);
+            Console.WriteLine();
+
+            // Display collated data.
+            for (int platformIndex = 0; platformIndex < platforms.Count; platformIndex++) {
+                var lastRow = lastRows[platformIndex].ToList();
+                var prevRow = (List<String>)prevRows[platformIndex];
+
+                String platform = lastRows[platformIndex][0];
+                Console.WriteLine("{0}:\n", platformNames[platform]);
+
+                // Adding 2 to skip headers for dimensions.
+                for (int metricIndex = 2; metricIndex < metrics + 2; metricIndex++) {
+                    String metricName = lastWeekResponse.Headers[metricIndex].Name;
+                    Console.WriteLine("- {0} delta ({1} last week vs {2} in the previous week) on {3}\n",
+                    Convert.ToSingle(lastRow[metricIndex]) - Convert.ToSingle(prevRow[metricIndex]),
+                    lastRow[metricIndex],
+                    prevRow[metricIndex],
+                    metricName);
+                }
             }
 
             Console.WriteLine();
