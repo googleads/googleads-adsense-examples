@@ -165,6 +165,9 @@ function makeRequests($service) {
       GenerateReport::run($service, $exampleAccountId, $exampleAdClientId);
       GenerateReportWithPaging::run($service, $exampleAccountId,
           $exampleAdClientId, MAX_REPORT_PAGE_SIZE);
+      FillMissingDatesInReport::run($service, $exampleAccountId,
+          $exampleAdClientId);
+      CollateReportData::run($service, $exampleAccountId, $exampleAdClientId);
     } else {
       print 'No ad clients found, unable to run dependant examples.';
     }
