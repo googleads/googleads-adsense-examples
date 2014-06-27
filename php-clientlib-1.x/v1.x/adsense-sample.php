@@ -60,6 +60,11 @@ function __autoload($class_name) {
 define('MAX_LIST_PAGE_SIZE', 50, true);
 define('MAX_REPORT_PAGE_SIZE', 50, true);
 
+// Configure token storage on disk.
+// If you want to store refresh tokens in a local disk file, set this to true.
+define('STORE_ON_DISK', false, true);
+define('TOKEN_FILENAME', 'tokens.dat', true);
+
 // Set up authentication.
 $client = new Google_Client();
 $client->addScope('https://www.googleapis.com/auth/adsense.readonly');
@@ -72,17 +77,24 @@ $client->setAuthConfigFile('client_secrets.json');
 // Create service.
 $service = new Google_Service_AdSense($client);
 
-// If we're logging out we just need to clear our local access token
+// If we're logging out we just need to clear our local access token.
+// Note that this only logs you out of the session. If STORE_ON_DISK is
+// enabled and you want to remove stored data, delete the file.
 if (isset($_REQUEST['logout'])) {
   unset($_SESSION['access_token']);
 }
 
 // If we have a code back from the OAuth 2.0 flow, we need to exchange that
 // with the authenticate() function. We store the resultant access token
-// bundle in the session, and redirect to this page.
+// bundle in the session (and disk, if enabled), and redirect to this page.
 if (isset($_GET['code'])) {
   $client->authenticate($_GET['code']);
+  // Note that "getAccessToken" actually retrieves both the access and refresh
+  // tokens, assuming both are available.
   $_SESSION['access_token'] = $client->getAccessToken();
+  if (STORE_ON_DISK) {
+    file_put_contents(TOKEN_FILENAME, $_SESSION['access_token']);
+  }
   $redirect = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
   header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL));
   exit;
@@ -92,7 +104,18 @@ if (isset($_GET['code'])) {
 // authentication URL.
 if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
   $client->setAccessToken($_SESSION['access_token']);
+} else if (STORE_ON_DISK && file_exists(TOKEN_FILENAME) &&
+      filesize(TOKEN_FILENAME) > 0) {
+  // Note that "setAccessToken" actually sets both the access and refresh token,
+  // assuming both were saved.
+  $client->setAccessToken(file_get_contents(TOKEN_FILENAME));
+  $_SESSION['access_token'] = $client->getAccessToken();
 } else {
+  // If we're doing disk storage, generate a URL that forces user approval.
+  // This is the only way to guarantee we get back a refresh token.
+  if (STORE_ON_DISK) {
+    $client->setApprovalPrompt('force');
+  }
   $authUrl = $client->createAuthUrl();
 }
 
