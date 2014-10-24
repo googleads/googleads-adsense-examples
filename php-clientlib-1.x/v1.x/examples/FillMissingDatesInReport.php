@@ -125,12 +125,12 @@ class FillMissingDatesInReport {
       throw new Exception('Results require a DATE or MONTH dimension.');
     }
 
-    $processedData = [];
+    $processedData = array();
     $reportRowPos = 0;
 
     while ($date < $endDate) {
       $rowDate = null;
-      $currentRow = [];
+      $currentRow = array();
       // If we haven't haven't reached the end of the response data yet.
       if (!empty($report['rows']) &&
           count($report['rows']) > $reportRowPos) {
@@ -150,7 +150,7 @@ class FillMissingDatesInReport {
         $reportRowPos++;
       } else {
         // Generate row with empty data for this date.
-        $newRow = [];
+        $newRow = array();
         $newRow[] = $date->format($dateFormat);
         $numHeaders = count($report['headers']);
         for ($i = 1; $i < $numHeaders; $i++) {
