@@ -1,4 +1,4 @@
-# AdSense Management API v1.4 Samples
+# AdSense Management API v2 Samples
 
 A collection of command-line samples for the AdSense Management API.
 
