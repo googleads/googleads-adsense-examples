@@ -27,14 +27,10 @@
  * <li>Listing all custom channels for an ad client</li>
  * <li>Listing all ad units for a custom channel</li>
  * <li>Listing all URL channels for an ad client</li>
- * <li>Running a report for an ad client, for the past 7 days</li>
- * <li>Running a paginated report for an ad client, for the past 7 days</li>
+ * <li>Running a report for an ad client</li>
  * <li>Listing all saved reports for an account</li>
  * <li>Running a saved report for an account</li>
- * <li>Listing all saved ad styles for an account</li>
  * <li>Listing all alerts for an account</li>
- * <li>Listing all dimensions for the user</li>
- * <li>Listing all metrics for the user</li>
  * </ul>
  *
  */
