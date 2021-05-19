@@ -32,8 +32,7 @@ class GenerateSavedReport {
   public static function run($service, $savedReportId) {
     $separator = str_repeat('=', 80) . "\n";
     print $separator;
-    printf("Running saved report %s on account %s\n", $savedReportId,
-        $accountId);
+    printf("Running saved report %s\n", $savedReportId);
     print $separator;
 
     // Run report.
