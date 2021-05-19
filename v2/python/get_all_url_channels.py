@@ -29,10 +29,11 @@ from googleapiclient import discovery
 
 
 # Declare command-line flags.
-argparser = argparse.ArgumentParser(add_help=False)
+argparser = argparse.ArgumentParser(add_help=True)
 argparser.add_argument(
     '--ad_client_id',
-    help='The ID of the ad client for which to fetch ad units')
+    help='The ID of the ad client for which to fetch ad units. Format: '
+         '"accounts/{account}/adclient/{adclient}".')
 
 args = argparser.parse_args()
 ad_client_id = args.ad_client_id

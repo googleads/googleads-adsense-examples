@@ -29,10 +29,11 @@ from googleapiclient import discovery
 
 
 # Declare command-line flags.
-argparser = argparse.ArgumentParser(add_help=False)
+argparser = argparse.ArgumentParser(add_help=True)
 argparser.add_argument(
     '--ad_unit_id',
-    help='The ID of the ad unit for which to fetch custom channels')
+    help='The ID of the ad unit for which to fetch custom channels. Format: '
+         '"accounts/{account}/adclients/{adclient}/adunits/{adunit}".')
 
 args = argparser.parse_args()
 ad_unit_id = args.ad_unit_id

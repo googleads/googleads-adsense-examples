@@ -17,11 +17,11 @@ A collection of command-line samples for the AdSense Management API.
   $ pip install google_auth_oauthlib
   ```
 
-2. (No longer needed, check on this) Make sure you can import the client library:
+2. Make sure you can import the client library:
 
   ```
   $ python
-  >>> import apiclient
+  >>> import googleapiclient
   ```
 
 3. Execute any of the scripts to begin the auth flow:
@@ -34,7 +34,9 @@ A collection of command-line samples for the AdSense Management API.
 
   Note: some examples require an argument to be passed in in order to run,
   e.g., `python get_all_ad_units.py --ad_client_id
-  accounts/{accountId}/adclients/{adClientId}`.
+  accounts/{accountId}/adclients/{adClientId}`. To determine what arguments are
+  required you can pass in `help` as an argument, e.g.,
+  `python get_all_ad_units.py --help`/.
 
 4. Accept the permissions dialog. The browser should display
 
