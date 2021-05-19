@@ -21,7 +21,8 @@ API.
 * Change the include path in adsense-sample.php to your vendor directory if
   needed.
 * Modify `client_secrets.json` with your client ID, client secret and redirect
-  URL (`http://your/path/adsense-sample.php`).
+  URL (`http://localhost:8000/adsense-sample.php` or wherever your PHP server
+  is located).
 * (Optional) If you want to store credentials between runs to avoid authorizing
   more than once, change `STORE_ON_DISK` in adsense-sample.php to `true`.
   * You may have to give your PHP installation write permissions to the token
