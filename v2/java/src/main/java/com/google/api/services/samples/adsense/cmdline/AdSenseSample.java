@@ -27,6 +27,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.DataStoreFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.adsense.v2.Adsense;
+import com.google.api.services.adsense.v2.AdsenseScopes;
 import com.google.api.services.adsense.v2.model.Account;
 import com.google.api.services.adsense.v2.model.AdClient;
 import com.google.api.services.adsense.v2.model.AdUnit;
@@ -36,6 +37,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * A sample application that runs multiple requests against the AdSense Management API v2. These
@@ -97,7 +99,7 @@ public class AdSenseSample {
     // set up authorization code flow
     GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
         httpTransport, JSON_FACTORY, clientSecrets,
-        Collections.singleton(AdSenseScopes.ADSENSE_READONLY)).setDataStoreFactory(
+        Collections.singleton(AdsenseScopes.ADSENSE_READONLY)).setDataStoreFactory(
         dataStoreFactory).build();
     // authorize
     return new AuthorizationCodeInstalledApp(flow, new LocalServerReceiver()).authorize("user");
@@ -109,12 +111,12 @@ public class AdSenseSample {
    * @return An initialized AdSense service object.
    * @throws Exception
    */
-  private static AdSense initializeAdsense() throws Exception {
+  private static Adsense initializeAdsense() throws Exception {
     // Authorization.
     Credential credential = authorize();
 
     // Set up AdSense Management API client.
-    AdSense adsense = new AdSense.Builder(
+    Adsense adsense = new Adsense.Builder(
         new NetHttpTransport(), JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME)
         .build();
 

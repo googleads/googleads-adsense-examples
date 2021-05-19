@@ -16,6 +16,7 @@ package com.google.api.services.samples.adsense.cmdline;
 
 import com.google.api.services.adsense.v2.Adsense;
 import com.google.api.services.adsense.v2.model.CustomChannel;
+import com.google.api.services.adsense.v2.model.ListLinkedCustomChannelsResponse;
 import java.util.List;
 
 /**

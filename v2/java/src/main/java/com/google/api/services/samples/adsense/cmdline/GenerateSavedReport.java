@@ -16,6 +16,10 @@ package com.google.api.services.samples.adsense.cmdline;
 
 import com.google.api.services.adsense.v2.Adsense;
 import com.google.api.services.adsense.v2.Adsense.Accounts.Reports.Saved.Generate;
+import com.google.api.services.adsense.v2.model.Cell;
+import com.google.api.services.adsense.v2.model.Header;
+import com.google.api.services.adsense.v2.model.ReportResult;
+import com.google.api.services.adsense.v2.model.Row;
 import java.util.List;
 
 /**

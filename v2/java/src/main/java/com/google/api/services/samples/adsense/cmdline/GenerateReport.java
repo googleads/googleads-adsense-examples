@@ -14,8 +14,8 @@
 
 package com.google.api.services.samples.adsense.cmdline;
 
-import com.google.api.services.adsense.Adsense;
-import com.google.api.services.adsense.Adsense.Reports.Generate;
+import com.google.api.services.adsense.v2.Adsense;
+import com.google.api.services.adsense.v2.Adsense.Accounts.Reports.Generate;
 import com.google.api.services.adsense.v2.model.Cell;
 import com.google.api.services.adsense.v2.model.Header;
 import com.google.api.services.adsense.v2.model.ReportResult;
