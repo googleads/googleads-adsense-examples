@@ -77,5 +77,8 @@ def get_adsense_credentials(overwrite_existing_credentials=False):
     flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
     credentials = flow.run_console()
     with open(CREDENTIALS_FILE, 'w') as credentials_file:
-      json.dump(credentials.to_json(), credentials_file)
+      credentials_json = credentials.to_json()
+      if isinstance(credentials_json, str):
+        credentials_json = json.loads(credentials_json)
+      json.dump(credentials_json, credentials_file)
   return credentials
