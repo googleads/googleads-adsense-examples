@@ -29,6 +29,9 @@ API.
     file. One easy way of doing this is creating an empty `tokens.dat` file in
     the installation directory and making it writeable by your web server.
 * Open the sample (`http://your/path/adsense-sample.php`) in your browser.
+* If you get an OAuth error for having an unauthorized redirect URI, you might
+  need to go to your API credentials in Google Cloud Platform and add your PHP
+  server address to the "Authorized redirect URIs" section.
 
 This will start an authentication flow, redirect back to your server, and then
 print data about your AdSense account.
