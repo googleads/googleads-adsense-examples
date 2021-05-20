@@ -57,8 +57,7 @@ def main(argv):
           parent=ad_client_id, pageSize=MAX_PAGE_SIZE)
 
       while request is not None:
-        result = request.execute()
-        custom_channels = result['customChannels']
+        result = request.execute() 
 
         if 'customChannels' in result:
           for custom_channel in result['customChannels']:
