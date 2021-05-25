@@ -1,0 +1,3 @@
+source :rubygems
+
+gem 'google-apis-adsense_v2', '>= 0.1'
