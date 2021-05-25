@@ -19,7 +19,6 @@ https://github.com/googleapis/google-api-ruby-client
 
 ## Running the Samples
 
-
 1. Run a sample from this directory:
 
         $ ruby get_all_ad_clients.rb
