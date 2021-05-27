@@ -9,13 +9,17 @@ the AdSense Management API.
 ## Prerequisites
 
 Please make sure that you're running Ruby 2.5+ and you've run
-`gem install` in this directory to install all prerequisites.
+`gem install google-apis-adsense_v2` to install the Ruby client library for the
+AdSense Management API v2.
 
 ## Setup Authentication
 
 Before getting started, check the README on the Ruby client library
 documentation page:
 https://github.com/googleapis/google-api-ruby-client
+
+To authenticate your application, you will need to add your Client ID and Client
+Secret to the `client_secrets.json` file.
 
 ## Running the Samples
 
