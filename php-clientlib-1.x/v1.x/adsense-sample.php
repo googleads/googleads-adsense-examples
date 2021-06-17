@@ -93,7 +93,7 @@ if (isset($_GET['code'])) {
   // tokens, assuming both are available.
   $_SESSION['access_token'] = $client->getAccessToken();
   if (STORE_ON_DISK) {
-    file_put_contents(TOKEN_FILENAME, $_SESSION['access_token']);
+    file_put_contents(TOKEN_FILENAME, json_encode($_SESSION['access_token']));
   }
   $redirect = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
   header('Location: ' . filter_var($redirect, FILTER_SANITIZE_URL));
@@ -108,7 +108,7 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
       filesize(TOKEN_FILENAME) > 0) {
   // Note that "setAccessToken" actually sets both the access and refresh token,
   // assuming both were saved.
-  $client->setAccessToken(file_get_contents(TOKEN_FILENAME));
+  $client->setAccessToken(json_decode(file_get_contents(TOKEN_FILENAME), true));
   $_SESSION['access_token'] = $client->getAccessToken();
 } else {
   // If we're doing disk storage, generate a URL that forces user approval.
