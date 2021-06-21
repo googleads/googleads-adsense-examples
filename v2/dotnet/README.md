@@ -29,5 +29,7 @@
      to include your `ClientId` and `ClientSecret`.
 
 ## Run the Examples
-* Build and run AdSenseSample.cs with the command `dotnet run AdSenseSample.cs`.
+* Build and run AdSenseSample.cs, which runs various examples against the
+  AdSense Management API. For examples, if you are using .NET Core, you
+  can use the command `dotnet run AdSenseSample.cs`.
 * The executable file will start an auth flow and then print data about the AdSense account.
