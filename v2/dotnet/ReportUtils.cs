@@ -25,92 +25,78 @@ using Google.Apis.Util;
 
 using GenerateRequest = Google.Apis.Adsense.v2.AccountsResource.ReportsResource.GenerateRequest;
 
-namespace AdSense.Sample
-{
+namespace AdSense.Sample {
+  /// <summary>
+  /// Collection of utilities to display and modify reports
+  /// </summary>
+  public static class ReportUtils {
+    public const string DATEPATTERN = "yyyy-MM-dd";
+    public const string MONTHPATTERN = "yyyy-MM";
+
     /// <summary>
-    /// Collection of utilities to display and modify reports
+    /// Displays the headers for the report.
     /// </summary>
-    public static class ReportUtils
-    {
-        public const string DATEPATTERN = "yyyy-MM-dd";
-        public const string MONTHPATTERN = "yyyy-MM";
+    /// <param name="headers">The list of headers to be displayed</param>
+    public static void DisplayHeaders(IList<Header> headers) {
+      foreach (var header in headers) {
+        Console.Write("{0, -25}", header.Name);
+      }
 
-        /// <summary>
-        /// Displays the headers for the report.
-        /// </summary>
-        /// <param name="headers">The list of headers to be displayed</param>
-        public static void DisplayHeaders(IList<Header> headers)
-        {
-            foreach (var header in headers)
-            {
-                Console.Write("{0, -25}", header.Name);
-            }
-
-            Console.WriteLine();
-        }
-
-        /// <summary>
-        /// Displays a list of rows for the report.
-        /// </summary>
-        /// <param name="rows">The list of rows to display.</param>
-        public static void DisplayRows(IList<Row> rows)
-        {
-            foreach (var row in rows)
-            {
-                foreach (var cell in row.Cells)
-                {
-                    Console.Write("{0, -25}", cell.Value);
-                }
-
-                Console.WriteLine();
-            }
-        }
-
-        /// <summary>
-        /// Escape special characters for a parameter being used in a filter.
-        /// </summary>
-        /// <param name="parameter">The parameter to be escaped.</param>
-        /// <returns>The escaped parameter.</returns>
-        public static string EscapeFilterParameter(string parameter)
-        {
-            return parameter.Split("/").Last().Replace("\\", "\\\\").Replace(",", "\\,");
-        }
-
-        public static IList<T> NullToEmpty<T>(this IList<T> list)
-        {
-            return list ?? new List<T>();
-        }
-
-        public static bool IsNullOrEmpty<T>(this IList<T> list)
-        {
-            return list == null || list.Count == 0;
-        }
-
-        public static void AddDimension(this GenerateRequest request, GenerateRequest.DimensionsEnum dimension)
-        {
-            string dimensionText = Utilities.ConvertToString(dimension);
-
-	    request.ModifyRequest += message =>
-            {
-                var uriBuilder = new UriBuilder(message.RequestUri);
-                string separator = uriBuilder.Query == "" ? "" : "&";
-                uriBuilder.Query += $"{separator}dimensions={dimensionText}";
-                message.RequestUri = uriBuilder.Uri;
-            };
-        }
-
-        public static void AddMetric(this GenerateRequest request, GenerateRequest.MetricsEnum metric)
-        {
-            string metricText = Utilities.ConvertToString(metric);
-
-            request.ModifyRequest += message =>
-            {
-                var uriBuilder = new UriBuilder(message.RequestUri);
-                string separator = uriBuilder.Query == "" ? "" : "&";
-                uriBuilder.Query += $"{separator}metrics={metricText}";
-                message.RequestUri = uriBuilder.Uri;
-            };
-        }
-
+      Console.WriteLine();
     }
+
+    /// <summary>
+    /// Displays a list of rows for the report.
+    /// </summary>
+    /// <param name="rows">The list of rows to display.</param>
+    public static void DisplayRows(IList<Row> rows) {
+      foreach (var row in rows) {
+        foreach (var cell in row.Cells) {
+          Console.Write("{0, -25}", cell.Value);
+        }
+
+        Console.WriteLine();
+      }
+    }
+
+    /// <summary>
+    /// Escape special characters for a parameter being used in a filter.
+    /// </summary>
+    /// <param name="parameter">The parameter to be escaped.</param>
+    /// <returns>The escaped parameter.</returns>
+    public static string EscapeFilterParameter(string parameter) {
+      return parameter.Split("/").Last().Replace("\\", "\\\\").Replace(",", "\\,");
+    }
+
+    public static IList<T> NullToEmpty<T>(this IList<T> list) {
+      return list ?? new List<T>();
+    }
+
+    public static bool IsNullOrEmpty<T>(this IList<T> list) {
+      return list == null || list.Count == 0;
+    }
+
+    public static void AddDimension(this GenerateRequest request,
+                                    GenerateRequest.DimensionsEnum dimension) {
+      string dimensionText = Utilities.ConvertToString(dimension);
+
+      request.ModifyRequest += message => {
+        var uriBuilder = new UriBuilder(message.RequestUri);
+        string separator = uriBuilder.Query == "" ? "" : "&";
+        uriBuilder.Query += $"{separator}dimensions={dimensionText}";
+        message.RequestUri = uriBuilder.Uri;
+      };
+    }
+
+    public static void AddMetric(this GenerateRequest request, GenerateRequest.MetricsEnum metric) {
+      string metricText = Utilities.ConvertToString(metric);
+
+      request.ModifyRequest += message => {
+        var uriBuilder = new UriBuilder(message.RequestUri);
+        string separator = uriBuilder.Query == "" ? "" : "&";
+        uriBuilder.Query += $"{separator}metrics={metricText}";
+        message.RequestUri = uriBuilder.Uri;
+      };
+    }
+  }
 }

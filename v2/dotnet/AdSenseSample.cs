@@ -23,56 +23,50 @@ using Google.Apis.Adsense.v2.Data;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 
-namespace AdSense.Sample
-{
-    /// <summary>
-    /// A sample application that runs multiple requests against the AdSense Management API.
-    /// <list type="bullet">
-    /// <item>
-    /// <description>Initializes the user credentials</description> 
-    /// </item>
-    /// <item>
-    /// <description>Creates the service that queries the API</description> 
-    /// </item>
-    /// <item>
-    /// <description>Executes the requests</description> 
-    /// </item>
-    /// </list> 
-    /// </summary>
-    internal class AdSenseSample
-    {
-        private static readonly int MaxListPageSize = 50;
+namespace AdSense.Sample {
+  /// <summary>
+  /// A sample application that runs multiple requests against the AdSense Management API.
+  /// <list type="bullet">
+  /// <item>
+  /// <description>Initializes the user credentials</description>
+  /// </item>
+  /// <item>
+  /// <description>Creates the service that queries the API</description>
+  /// </item>
+  /// <item>
+  /// <description>Executes the requests</description>
+  /// </item>
+  /// </list>
+  /// </summary>
+  internal class AdSenseSample {
+    private static readonly int MaxListPageSize = 50;
 
-        [STAThread]
-        internal static void Main(string[] args)
-        {
-            Console.WriteLine("\nAdSense Management API Command Line Sample");
-            Console.WriteLine("==========================================\n");
+    [STAThread]
+    internal static void Main(string[] args) {
+      Console.WriteLine("\nAdSense Management API Command Line Sample");
+      Console.WriteLine("==========================================\n");
 
-            GoogleWebAuthorizationBroker.Folder = "AdSense.Sample";
-            var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                new ClientSecrets
-                {
-                    ClientId = "INSERT_CLIENT_ID_HERE",
-                    ClientSecret = "INSERT_CLIENT_SECRET_HERE"
-                },
-                new string[] { AdsenseService.Scope.Adsense }, 
-                "user", 
-                CancellationToken.None).Result;
+      GoogleWebAuthorizationBroker.Folder = "AdSense.Sample";
+      var credential =
+          GoogleWebAuthorizationBroker
+              .AuthorizeAsync(new ClientSecrets { ClientId = "INSERT_CLIENT_ID_HERE",
+                                                  ClientSecret = "INSERT_CLIENT_SECRET_HERE" },
+                              new string[] { AdsenseService.Scope.Adsense }, "user",
+                              CancellationToken.None)
+              .Result;
 
-            // Create the service.
-            var service = new AdsenseService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "AdSense Sample"
-            });
+      // Create the service.
+      var service = new AdsenseService(new BaseClientService.Initializer() {
+        HttpClientInitializer = credential, ApplicationName = "AdSense Sample"
+      });
 
-            // Execute Publisher calls
-            ManagementApiConsumer managementApiConsumer = new ManagementApiConsumer(service, MaxListPageSize);
-            managementApiConsumer.RunCalls();
+      // Execute Publisher calls
+      ManagementApiConsumer managementApiConsumer =
+          new ManagementApiConsumer(service, MaxListPageSize);
+      managementApiConsumer.RunCalls();
 
-            Console.WriteLine("Press any key to continue...");
-            Console.ReadKey();
-        }
+      Console.WriteLine("Press any key to continue...");
+      Console.ReadKey();
     }
+  }
 }
