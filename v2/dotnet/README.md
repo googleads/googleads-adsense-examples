@@ -29,6 +29,9 @@
      to include your `ClientId` and `ClientSecret`.
 
 ## Run the Examples
+* Update `dotnet.csproj` with the `TargetFramework` you're using. The
+  placeholder value is for .NET Core, so if that's your framework you will only
+  need to replace 'X.X' with your version.
 * Build and run AdSenseSample.cs, which runs various examples against the
   AdSense Management API. For examples, if you are using .NET Core, you
   can use the command `dotnet run AdSenseSample.cs`.

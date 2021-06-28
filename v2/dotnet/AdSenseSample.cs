@@ -46,8 +46,8 @@ namespace AdSense.Sample
         [STAThread]
         internal static void Main(string[] args)
         {
-            Console.WriteLine("AdSense Management API Command Line Sample");
-            Console.WriteLine("==========================================");
+            Console.WriteLine("\nAdSense Management API Command Line Sample");
+            Console.WriteLine("==========================================\n");
 
             GoogleWebAuthorizationBroker.Folder = "AdSense.Sample";
             var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
