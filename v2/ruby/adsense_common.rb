@@ -23,12 +23,14 @@ require 'google/apis/adsense_v2'
 require 'googleauth'
 require 'googleauth/stores/file_token_store'
 require 'logger'
+require 'rack'
 
 API_NAME = 'adsense'
 API_SCOPE = 'https://www.googleapis.com/auth/adsense.readonly'
 CLIENT_SECRETS_FILE = 'client_secrets.json'
 CREDENTIAL_STORE_FILE = "#{API_NAME}-oauth2.yaml"
-OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
+
+$auth_code = nil
 
 # Handles authentication and loading of the API.
 def service_setup()
@@ -43,6 +45,7 @@ def service_setup()
   # multiple users, you will need to manage them yourself. Note: this ID
   # is not directly related to Client ID or any other OAuth constructs.
   user_id = 'ruby-adsense-examples-user'
+  port = 9292
 
   # Get OAuth credentials.
   client_id = Google::Auth::ClientId.from_file(CLIENT_SECRETS_FILE)
@@ -54,14 +57,18 @@ def service_setup()
 
   # If OAuth tokens were not found, run the OAuth flow.
   if credentials.nil?
-    url = authorizer.get_authorization_url(base_url: OOB_URI)
-    puts 'Open the following URL in the browser and enter the ' +
-         'resulting code after authorization'
-    puts url
-    print 'Code: '
-    code = STDIN.gets
+    puts 'In order to authenticate your AdSense API app, you will need to ' +
+        'log in with your AdSense user credentials in a web browser. If you ' +
+        'choose to start a web server, you can use a browser to go to ' +
+        '"http://localhost:' + port.to_s + '/authorize" to complete the log ' +
+        'in flow.'
+    puts 'Press ENTER to start the web server, or press Ctrl-c to exit.'
+    _ = STDIN.gets  # Pause for user to read the authentication message above.
+    run_local_server(authorizer, user_id, port)
+    _ = STDIN.gets  # Pause for web server authentication flow to be completed.
+    raise 'No OAuth code found. Please retry the auth flow.' if $auth_code.nil?
     credentials = authorizer.get_and_store_credentials_from_code(
-        user_id: user_id, code: code, base_url: OOB_URI)
+        user_id: user_id, code: $auth_code, base_url: 'http://localhost:9292')
   end
 
   # Initialize and return API Service.
@@ -102,4 +109,41 @@ end
 def date_to_iso_string(date)
   return nil if date.nil?
   return '%d-%02d-%02d' % [date.year, date.month, date.day]
+end
+
+# Run a local server for OAuth authentication.
+def run_local_server(authorizer, user_id, port=9292)
+  puts 'Open the following URL in your browser:'
+  puts "http://localhost:" + port.to_s + "/authorize\n"
+
+  options = {}
+  options[:Port] = port
+  options[:AccessLog] = []  # This disables unnecessary logging.
+  options[:app] = lambda do |env|
+    req = Rack::Request.new(env)
+    response = [404, {}, []]  # 404 in case no cases match below.
+    if req.get? and req.path == '/authorize'
+      auth_url = authorizer.get_authorization_url(
+        login_hint: user_id,
+        request: req,
+        base_url: req.base_url
+      )
+      response = [ 302, {'Location' => auth_url}, [] ]
+    end
+    if req.get? and req.path == '/oauth2callback'
+      $auth_code = req.params['code']
+      puts 'Authentication successful! To continue the execution of your ' +
+          'app, press ENTER...'
+      response = [
+                   200,
+                   { "Content-Type" => "text/html" },
+                   ["You've successfully authenticated your application. You " +
+                    "may now go back to your terminal and press enter to " +
+                    "continue your application."]
+                 ]
+    end
+    response
+  end
+
+  Thread.new { Rack::Server.start(options) }
 end
