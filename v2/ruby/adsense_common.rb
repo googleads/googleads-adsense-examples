@@ -68,7 +68,8 @@ def service_setup()
     _ = STDIN.gets  # Pause for web server authentication flow to be completed.
     raise 'No OAuth code found. Please retry the auth flow.' if $auth_code.nil?
     credentials = authorizer.get_and_store_credentials_from_code(
-        user_id: user_id, code: $auth_code, base_url: 'http://localhost:9292')
+        user_id: user_id, code: $auth_code,
+        base_url: 'http://localhost:' + port.to_s)
   end
 
   # Initialize and return API Service.
