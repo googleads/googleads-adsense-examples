@@ -1,7 +1,7 @@
 Samples for the AdSense Management API
 ===========================
 The AdSense Management API v2 is
-[now availble](https://ads-developers.googleblog.com/2021/04/announcing-v2-of-adsense-management-api.html).
+[now available](https://ads-developers.googleblog.com/2021/04/announcing-v2-of-adsense-management-api.html).
 Updated examples can be found for each language in the top-level `v2`
 directory.
 
